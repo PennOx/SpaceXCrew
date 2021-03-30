@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SpaceXCrew</string>
+    <string name="api_link">https://api.spacexdata.com/v4/crew</string>
+</resources>
