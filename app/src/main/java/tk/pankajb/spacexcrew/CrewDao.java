@@ -15,7 +15,7 @@ public interface CrewDao {
     List<CrewMember> getAll();
 
     @Insert
-    void insertAll(CrewMember... crew);
+    void insertAll(CrewMember[] crew);
 
     @Query("DELETE FROM crewmember")
     void deleteAll();

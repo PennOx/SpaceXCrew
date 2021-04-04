@@ -30,7 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.member_item, parent, false);
+        View view = getInflatedMemberItemView(parent);
         return new ViewHolder(view);
     }
 
@@ -39,26 +39,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         CrewMember currentMember = crewMembers[position];
 
-        holder.agency.setText(currentMember.getAgency());
-        holder.name.setText(currentMember.getName());
-        holder.status.setText(currentMember.getStatus());
-        holder.wiki.setText(currentMember.getWikipedia());
-        holder.wiki.setTextColor(Color.BLUE);
-        holder.wiki.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(currentMember.getWikipedia()));
-                context.startActivity(intent);
-            }
-        });
-        Glide.with(context).load(currentMember.getImage()).into(holder.image);
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return crewMembers.length;
+        setCurrentMemberTexts(holder, currentMember);
+        setCurrentMemberImage(holder, currentMember);
+        setCurrentMemberClickListener(holder, currentMember);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -80,5 +63,38 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             agency = itemView.findViewById(R.id.item_agency);
             wiki = itemView.findViewById(R.id.item_wiki);
         }
+    }
+
+    private View getInflatedMemberItemView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.member_item, parent, false);
+    }
+
+    @Override
+    public int getItemCount() {
+        return crewMembers.length;
+    }
+
+    private void setCurrentMemberClickListener(ViewHolder holder, CrewMember currentMember) {
+        holder.wiki.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(currentMember.getWikipedia()));
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    private void setCurrentMemberImage(ViewHolder holder, CrewMember currentMember) {
+        Glide.with(context).load(currentMember.getImage()).into(holder.image);
+    }
+
+    private void setCurrentMemberTexts(ViewHolder holder, CrewMember currentMember) {
+
+        holder.agency.setText(currentMember.getAgency());
+        holder.name.setText(currentMember.getName());
+        holder.status.setText(currentMember.getStatus());
+        holder.wiki.setText(currentMember.getWikipedia());
+        holder.wiki.setTextColor(Color.BLUE);
     }
 }

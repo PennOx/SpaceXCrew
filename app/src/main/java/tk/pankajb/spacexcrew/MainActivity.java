@@ -1,14 +1,12 @@
 package tk.pankajb.spacexcrew;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import java.io.IOException;
 import java.util.List;
 
 import tk.pankajb.spacexcrew.Models.CrewMember;
@@ -17,15 +15,12 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    private CrewMember[] crewMembers;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.main_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        initializeUI();
 
     }
 
@@ -33,22 +28,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        List<CrewMember> crewMemberList = AppDatabase.getDatabase(getApplicationContext()).crewDao().getAll();
-
-        if(crewMemberList.isEmpty()){
-            Request request = new Request(this);
-            request.execute();
-        }else{
-            FromDataBase fromDataBase = new FromDataBase(this);
-            fromDataBase.execute();
+        if (isDataPresentInDatabase()) {
+            loadFromDatabase();
+        } else {
+            requestFromAPI();
         }
 
     }
 
     public void updateData(CrewMember[] crewMembers) {
-        this.crewMembers = crewMembers;
         RecyclerAdapter adapter = new RecyclerAdapter(this, crewMembers);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void initializeUI() {
+        recyclerView = findViewById(R.id.main_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void requestFromAPI() {
+        Request request = new Request(this);
+        request.execute();
+    }
+
+    private void loadFromDatabase() {
+        FromDataBase fromDataBase = new FromDataBase(this);
+        fromDataBase.execute();
+    }
+
+    private boolean isDataPresentInDatabase() {
+        List<CrewMember> crewMemberList = AppDatabase.getDatabase(getApplicationContext()).crewDao().getAll();
+        return !crewMemberList.isEmpty();
     }
 
     public void wentWrong() {
