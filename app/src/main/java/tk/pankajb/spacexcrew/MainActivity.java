@@ -1,6 +1,7 @@
 package tk.pankajb.spacexcrew;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,14 +37,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void clearDatabase(View view) {
+        AppDatabase.getDatabase(this).crewDao().deleteAll();
+    }
+
+    public void refreshData(View view) {
+        clearDatabase(null);
+        requestFromAPI();
+    }
+
     public void updateData(CrewMember[] crewMembers) {
         RecyclerAdapter adapter = new RecyclerAdapter(this, crewMembers);
         recyclerView.setAdapter(adapter);
     }
 
     private void initializeUI() {
-        recyclerView = findViewById(R.id.main_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setupRecycler();
     }
 
     private void requestFromAPI() {
@@ -52,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFromDatabase() {
-        FromDataBase fromDataBase = new FromDataBase(this);
-        fromDataBase.execute();
+        FromDataBase fromDataBase = new FromDataBase();
+        fromDataBase.execute(this);
     }
 
     private boolean isDataPresentInDatabase() {
@@ -61,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
         return !crewMemberList.isEmpty();
     }
 
-    public void wentWrong() {
-        Toast.makeText(this, "Something went wrong.", Toast.LENGTH_LONG).show();
+    private void setupRecycler() {
+        recyclerView = findViewById(R.id.main_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void wentWrong(String err) {
+        Toast.makeText(this, err, Toast.LENGTH_LONG).show();
     }
 }

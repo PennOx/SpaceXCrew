@@ -49,7 +49,7 @@ public class Request extends AsyncTask<Void, Void, CrewMember[]> {
         super.onPostExecute(crewMembers);
 
         if (crewMembers == null) {
-            weakReference.get().wentWrong();
+            weakReference.get().wentWrong("Empty table");
             return;
         }
         AppDatabase.getDatabase(weakReference.get().getApplicationContext()).crewDao().insertAll(crewMembers);
