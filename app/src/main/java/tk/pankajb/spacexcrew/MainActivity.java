@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestFromAPI() {
-        Request request = new Request(this);
-        request.execute();
+        Request request = new Request();
+        request.execute(this);
     }
 
     private void loadFromDatabase() {

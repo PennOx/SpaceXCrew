@@ -1,5 +1,6 @@
 package tk.pankajb.spacexcrew;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
@@ -11,17 +12,15 @@ import java.util.Scanner;
 
 import tk.pankajb.spacexcrew.Models.CrewMember;
 
-public class Request extends AsyncTask<Void, Void, CrewMember[]> {
+public class Request extends AsyncTask<Context, Void, CrewMember[]> {
 
-    private final WeakReference<MainActivity> weakReference;
+    private WeakReference<MainActivity> weakReference;
     private CrewMember[] crewMembers;
 
-    Request(MainActivity context) {
-        weakReference = new WeakReference<>(context);
-    }
-
     @Override
-    protected CrewMember[] doInBackground(Void... voids) {
+    protected CrewMember[] doInBackground(Context... contexts) {
+
+        weakReference = new WeakReference<>((MainActivity) contexts[0]);
 
         if (!isActivityLive()) {
             return null;
