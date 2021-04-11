@@ -44,27 +44,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         setCurrentMemberClickListener(holder, currentMember);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
-
-        View view;
-        ImageView image;
-        TextView name;
-        TextView status;
-        TextView agency;
-        TextView wiki;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            view = itemView;
-            image = itemView.findViewById(R.id.item_image);
-            name = itemView.findViewById(R.id.item_name);
-            status = itemView.findViewById(R.id.item_status);
-            agency = itemView.findViewById(R.id.item_agency);
-            wiki = itemView.findViewById(R.id.item_wiki);
-        }
-    }
-
     private View getInflatedMemberItemView(ViewGroup parent) {
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.member_item, parent, false);
     }
@@ -96,5 +75,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.status.setText(currentMember.getStatus());
         holder.wiki.setText(currentMember.getWikipedia());
         holder.wiki.setTextColor(Color.BLUE);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        View view;
+        ImageView image;
+        TextView name;
+        TextView status;
+        TextView agency;
+        TextView wiki;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            view = itemView;
+            image = itemView.findViewById(R.id.item_image);
+            name = itemView.findViewById(R.id.item_name);
+            status = itemView.findViewById(R.id.item_status);
+            agency = itemView.findViewById(R.id.item_agency);
+            wiki = itemView.findViewById(R.id.item_wiki);
+        }
     }
 }
